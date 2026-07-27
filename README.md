@@ -59,7 +59,7 @@ This project is built using a simple, modern stack:
 *   **Large Language Model**: Groq API (`llama-3.3-70b-versatile`)
 *   **Code Parser**: Tree-Sitter (`tree-sitter-python`, `tree-sitter-javascript`)
 *   **Frontend**: Plain HTML5, CSS3, and JavaScript (with a simple, dark glassmorphism design).
-*   **Job Queue (Optional)**: Redis & RQ (automatically falls back to FastAPI's built-in `BackgroundTasks` for local runs).
+*   **Job Queue**: Redis & RQ (automatically falls back to FastAPI's built-in `BackgroundTasks` for local runs - in progression).
 
 ---
 
