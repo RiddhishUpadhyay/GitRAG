@@ -4,6 +4,49 @@ GitRAG is a lightweight chatbot application designed to help developers query an
 
 ---
 
+## 📁 Folder Structure
+
+Below is the directory layout of the GitRAG codebase:
+
+```text
+gitRAG/
+├── app/
+│   ├── api/
+│   │   ├── auth.py          # Authentication middleware and session token tracking
+│   │   ├── routes_ingest.py # Endpoints for repo ingestion and indexing status
+│   │   └── routes_query.py  # Endpoints for hybrid query processing and history retrieval
+│   ├── cache/
+│   │   └── redis_client.py  # Upstash Redis cache and progress tracking client
+│   ├── generation/
+│   │   └── groq_client.py   # LLM generation via Groq API (llama-3.3-70b-versatile)
+│   ├── ingestion/
+│   │   ├── chunker.py       # Syntax-aware code chunker using Tree-Sitter
+│   │   ├── diff_sync.py     # Hash-based incremental sync and diff checker
+│   │   └── repo_loader.py   # Git cloning and repository file filters
+│   ├── reranking/
+│   │   └── reranker.py      # Cross-Encoder candidate reranker (BAAI/bge-reranker-base)
+│   ├── retrieval/
+│   │   ├── dense_search.py  # Qdrant client, collection init, and semantic vector search
+│   │   ├── embeddings.py    # SentenceTransformers document/query embedding generator
+│   │   └── sparse_search.py # TF-IDF vectorizer fitting and keyword search
+│   ├── config.py            # Global Pydantic settings loading env values
+│   ├── database.py          # SQLite connection manager and database schemas
+│   └── main.py              # FastAPI application initialization and login routes
+├── static/
+│   ├── index.html           # Dark-mode dashboard frontend structure and login UI
+│   ├── script.js            # User authentication, repository lists, and session chat scripts
+│   └── style.css            # Glassmorphism dark-themed style configurations
+├── temp/                    # Directory for temporary Git checkouts, SQLite, and chat histories
+├── .env.example             # Template file documenting environment variables
+├── Dockerfile               # Production container image instructions
+├── docker-compose.yml       # Local staging composition file for redis, server, and worker
+├── requirements.txt         # Project python dependencies file
+├── start.sh                 # Entrypoint role dispatch script (server/worker)
+└── README.md                # System documentation
+```
+
+---
+
 ## 🛠️ Tech Stack
 
 This project is built using a simple, modern stack:
@@ -51,18 +94,6 @@ When you ask a question:
 
 ---
 
-## 🧠 Design Choices
-
-### Why Hybrid Search & RRF?
-Sometimes dense vector search misses exact terms (like a specific variable name or config property), while standard keyword search misses conceptual matches (like mapping "login" to "authentication"). Combining both ensures the chatbot finds the correct files. RRF merges these lists without needing to normalize scores between different models first.
-
-### Cross-Encoder & Relevance Filtering
-Cross-Encoders evaluate the query and code snippet together, which is highly accurate. To present these scores clearly on the UI cards and filter out noise, the raw logits are mapped to a percentage using a standard sigmoid function:
-\[\text{Score} = \frac{1}{1 + e^{-\text{logit}}}\]
-Any reference under `0.35` is hidden to keep the response clean and minimize token usage, while the best matching snippet is always kept as a fallback.
-
----
-
 ## 💻 Running the Server Locally
 
 ### 1. Configure Environment
@@ -72,7 +103,7 @@ ENV=development
 TEMP_DIR=./temp
 GROQ_API_KEY=your_groq_api_key
 QDRANT_URL=https://your-qdrant-cluster.cloud.qdrant.io:6333
-QDRANT_API_KEY=your_qdrant_api_key
+QDRANT_API_KEY=your_qdrant_api_key_here
 ```
 
 ### 2. Install Dependencies
