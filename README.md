@@ -38,10 +38,7 @@ gitRAG/
 │   └── style.css            # Glassmorphism dark-themed style configurations
 ├── temp/                    # Directory for temporary Git checkouts, SQLite, and chat histories
 ├── .env.example             # Template file documenting environment variables
-├── Dockerfile               # Production container image instructions
-├── docker-compose.yml       # Local staging composition file for redis, server, and worker
 ├── requirements.txt         # Project python dependencies file
-├── start.sh                 # Entrypoint role dispatch script (server/worker)
 └── README.md                # System documentation
 ```
 
