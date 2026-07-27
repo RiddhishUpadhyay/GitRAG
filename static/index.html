@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitRAG - Codebase Chatbot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Login Screen Overlay -->
+    <div id="login-overlay" class="login-overlay">
+        <div class="login-box">
+            <h2 id="auth-title">🔑 GitRAG Login</h2>
+            <form id="login-form">
+                <div class="login-input-group">
+                    <label for="login-username">Username</label>
+                    <input type="text" id="login-username" placeholder="Enter username..." required autocomplete="username">
+                </div>
+                <div class="login-input-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+                <div id="confirm-password-group" class="login-input-group hidden">
+                    <label for="login-confirm-password">Confirm Password</label>
+                    <input type="password" id="login-confirm-password" placeholder="••••••••" autocomplete="new-password">
+                </div>
+                <button type="submit" id="login-submit-btn">Unlock Dashboard</button>
+                <p id="login-error-msg" class="login-error-msg hidden">Invalid credentials. Try again.</p>
+                <div class="auth-toggle">
+                    <span id="auth-toggle-text">Don't have an account?</span>
+                    <a href="#" id="auth-toggle-link">Sign Up</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="glow-bg"></div>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <span class="logo-icon">⚡</span>
+                <h1>GitRAG</h1>
+            </div>
+            
+            <div class="ingest-section">
+                <h3>Ingest Repository</h3>
+                <form id="ingest-form">
+                    <div class="input-group">
+                        <input type="url" id="repo-url" placeholder="https://github.com/user/repo" required>
+                        <button type="submit" id="ingest-btn">Index</button>
+                    </div>
+                </form>
+                
+                <!-- Ingestion Status Panel -->
+                <div id="status-panel" class="status-panel hidden">
+                    <div class="status-header">
+                        <span class="status-dot pulse"></span>
+                        <span id="status-title">Indexing...</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div id="status-progress-bar" class="progress-bar" style="width: 0%"></div>
+                    </div>
+                    <p id="status-message">Starting clone...</p>
+                </div>
+            </div>
+
+            <div class="repos-list-section">
+                <h3>Indexed Repositories</h3>
+                <div id="no-repos" class="empty-state">No repositories indexed yet.</div>
+                <ul id="repos-list" class="repos-list">
+                    <!-- Loaded dynamically -->
+                </ul>
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="connection-status">
+                    <span class="connected-dot"></span>
+                    <span>Qdrant Connected</span>
+                </div>
+                <button id="logout-btn" class="logout-btn">Sign Out</button>
+            </div>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-area">
+            <!-- Header -->
+            <header class="chat-header">
+                <div class="active-repo-info">
+                    <span class="current-label">Active Repo:</span>
+                    <span id="active-repo-name" class="active-repo-name">None Selected</span>
+                </div>
+                <div class="header-actions">
+                    <button id="resync-btn" class="action-btn hidden" title="Manual Re-sync (Only embeds changed files)">🔄 Re-sync</button>
+                </div>
+            </header>
+
+            <!-- Chat Window -->
+            <div id="chat-messages" class="chat-messages">
+                <div class="welcome-message">
+                    <div class="welcome-icon">💬</div>
+                    <h2>Ask Questions About Your Code</h2>
+                    <p>Enter a GitHub repository URL on the left sidebar to clone, chunk, and embed the repository. Once indexed, select it and start asking technical questions!</p>
+                    <div class="example-questions">
+                        <button class="example-btn">How does the caching layer work?</button>
+                        <button class="example-btn">Where is the auth token validated?</button>
+                        <button class="example-btn">What are the main API endpoints?</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input Area -->
+            <footer class="chat-input-area">
+                <form id="chat-form">
+                    <div class="chat-input-wrapper">
+                        <textarea id="chat-input" placeholder="Ask a question about the codebase... (e.g. how are database transactions handled?)" rows="1" disabled></textarea>
+                        <button type="submit" id="send-btn" disabled>
+                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        </button>
+                    </div>
+                </form>
+            </footer>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
