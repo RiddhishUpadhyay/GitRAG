@@ -76,7 +76,7 @@ async def ingest_repository(
                 result_ttl=86400, # 1 day
                 job_timeout=600   # 10 minutes
             )
-            return {"job_id": job.get_id(), "repo_id": repo_id, "mode": "rq"}
+            return {"job_id": job.id, "repo_id": repo_id, "mode": "rq"}
         except Exception as e:
             logger.error(f"Failed to queue job on Redis, falling back to BackgroundTasks: {e}")
             

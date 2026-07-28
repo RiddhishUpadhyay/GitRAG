@@ -37,7 +37,7 @@ gitRAG/
 │   ├── script.js            # User authentication, repository lists, and session chat scripts
 │   └── style.css            # Glassmorphism dark-themed style configurations
 ├── temp/                    # Directory for temporary Git checkouts, SQLite, and chat histories
-├── .gitignore               # Ignoring specific files
+├── .env.example             # Template file documenting environment variables
 ├── requirements.txt         # Project python dependencies file
 └── README.md                # System documentation
 ```
@@ -101,6 +101,10 @@ TEMP_DIR=./temp
 GROQ_API_KEY=your_groq_api_key
 QDRANT_URL=https://your-qdrant-cluster.cloud.qdrant.io:6333
 QDRANT_API_KEY=your_qdrant_api_key_here
+
+# Optional: Add your Upstash Redis URL to use the Redis/RQ queue system.
+# If omitted or left empty, the server automatically falls back to local BackgroundTasks.
+REDIS_URL=rediss://default:password@endpoint.upstash.io:6379
 ```
 
 ### 2. Install Dependencies
@@ -109,7 +113,15 @@ pip install -r requirements.txt
 ```
 
 ### 3. Run the Server
+In your first terminal, start the FastAPI server (only watching the `app` folder to prevent reload conflicts):
 ```cmd
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload --reload-dir app
 ```
+
+### 4. Run the Background Worker (Optional)
+If you configured a `REDIS_URL` in your `.env` file, open a second terminal and start the RQ worker (using `SimpleWorker` to support Windows):
+```cmd
+rq worker ingest --url <your_redis_url> --worker-class rq.SimpleWorker
+```
+
 Open your browser and navigate to **[http://127.0.0.1:8000/static/index.html](http://127.0.0.1:8000/static/index.html)** to create an account and start querying repositories!
