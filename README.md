@@ -37,7 +37,7 @@ gitRAG/
 │   ├── script.js            # User authentication, repository lists, and session chat scripts
 │   └── style.css            # Glassmorphism dark-themed style configurations
 ├── temp/                    # Directory for temporary Git checkouts, SQLite, and chat histories
-├── .env.example             # Template file documenting environment variables
+├── .gitignore               # Ignoring specific files
 ├── requirements.txt         # Project python dependencies file
 └── README.md                # System documentation
 ```
